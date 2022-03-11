@@ -1,5 +1,6 @@
 package br.com.pablo.api;
 
+import br.com.pablo.api.domain.User;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -8,6 +9,9 @@ public class ApiApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(ApiApplication.class, args);
+
+		User user = new User(1, "valdir", "email@email.com", "senha");
+
 	}
 
 }

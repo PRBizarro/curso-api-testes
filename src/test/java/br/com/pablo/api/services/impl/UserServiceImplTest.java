@@ -155,7 +155,7 @@ class UserServiceImplTest {
     }
 
     @Test
-    void deleteWIthSuccess() {
+    void deleteWithSuccess() {
         when(repository.findById(anyInt())).thenReturn(optionalUser);
         doNothing().when(repository).deleteById(anyInt());
 
@@ -164,6 +164,15 @@ class UserServiceImplTest {
     }
 
     @Test
-    void whenDeleteThenReturnObjectNotFoundException() {
+    void deleteWithReturnObjectNotFoundException() {
+        when(repository.findById(anyInt())).thenThrow(new ObjectNotFoundException("Objeto não encontrado"));
+        doNothing().when(repository).deleteById(anyInt());
+
+        try {
+            service.delete(ID);
+        } catch (Exception ex){
+            assertEquals(ObjectNotFoundException.class, ex.getClass());
+            assertEquals("Objeto não encontrado", ex.getMessage());
+        }
     }
 }

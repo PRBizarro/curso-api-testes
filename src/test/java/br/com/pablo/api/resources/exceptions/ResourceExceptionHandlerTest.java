@@ -1,5 +1,6 @@
 package br.com.pablo.api.resources.exceptions;
 
+import br.com.pablo.api.services.exceptions.DataIntegrityViolationException;
 import br.com.pablo.api.services.exceptions.ObjectNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,6 +19,7 @@ import static org.mockito.MockitoAnnotations.*;
 class ResourceExceptionHandlerTest {
 
     public static final String OBJETO_NAO_ENCONTRADO = "Objeto não encontrado";
+    public static final String EMAIL_JA_CADASTRADO_NO_SISTEMA = "Email já cadastrado no sistema";
     @InjectMocks
     private ResourceExceptionHandler exceptionHandler;
 
@@ -43,6 +45,18 @@ class ResourceExceptionHandlerTest {
     }
 
     @Test
-    void dataIntegrityViolationException() {
+    void whenDataIntegrityViolationExceptionThenReturnAResponseEntity() {
+        ResponseEntity<StandardError> response = exceptionHandler
+                .dataIntegrityViolationException(
+                        new DataIntegrityViolationException(EMAIL_JA_CADASTRADO_NO_SISTEMA),
+                        new MockHttpServletRequest());
+
+        assertNotNull(response);
+        assertNotNull(response.getBody());
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertEquals(ResponseEntity.class,response.getClass());
+        assertEquals(StandardError.class,response.getBody().getClass());
+        assertEquals(EMAIL_JA_CADASTRADO_NO_SISTEMA,response.getBody().getError());
+        assertEquals(400, response.getBody().getStatus());
     }
 }
